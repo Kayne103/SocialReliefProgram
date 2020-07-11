@@ -1,0 +1,45 @@
+body{
+    background-color: rgb(71, 73, 78);
+    font-family: sans-serif;
+    opacity: 0.7;
+    text-align: center;
+}
+h1{
+    color: whitesmoke;
+    font-size:xx-large;
+    width: 100%;
+    height: 3.5rem;
+    background-color: black;
+    padding: 30px;
+    left:0;
+    position: fixed;
+    top: -30px;
+}
+h2{
+    position: static;
+    padding: 100px;
+}
+
+a {
+    color: whitesmoke;
+    text-decoration: none;
+}
+#footer {
+    background-color: black;
+    color: rgb(34, 73, 73);
+    font-family: sans-serif;
+    position: fixed;
+    left: 0;
+    bottom: 0%;
+    width: 100%;
+    height: 1.5rem;
+    padding: 30px;
+}
+
+.main-container {
+    min-height: 100vh; /* will cover the 100% of viewport */
+    overflow: hidden;
+    display: block;
+    position: relative;
+    padding-bottom: 150px; /* height of your footer */
+   }
