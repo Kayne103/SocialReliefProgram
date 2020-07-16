@@ -15,19 +15,33 @@
             
                 <label>adminPassword</label>
                 <input type="text" name="adminPassword"><br>
+
                 <input type="hidden" name="submit" value="TRUE">
                 <input type="submit" value="Login">
            
         </form>   
         <?php 
-            require_once "config.php";
+            //require_once "config.php";
+            //require_once "func/func.php";
+            $adminname = "";
+            $adminpassword = "";
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                    if (empty(trim($_POST["adminUsername"])) || empty(trim($_POST["adminPassword"]))) {
+                    $adminname = extraction($_POST["adminUsername"]);
+                    $adminpassword = extraction($_POST["adminPassword"]);
+                    if (empty($adminname) || empty($adminpassword)) {
                         echo "empty username, password\n";
                     } else {
-                        echo "username : ".$_POST["adminUsername"];
-                        echo "password : ".$_POST["adminPassword"];
-                        $sql = "SELECT adminName,adminPassword FROM Admin";
+                        //echo "username : ".$_POST["adminUsername"];
+                        //echo "password : ".$_POST["adminPassword"];
+                        $dbhost = 'localhost';
+                        $dbuser = 'phpmyadmin';
+                        $dbpass = 'KillSwitch[103]';
+                        $dbname = 'SocialReliefProgram';
+                        $conn = mysqli_connect($dbhost, $dbuser, $dbpass) 
+                        or die('Error connecting to mysql');
+                        mysqli_select_db($conn, $dbname) or die("Could not open database");
+
+                        $sql = "SELECT * FROM Admin WHERE adminName = $adminname AND adminPassword = $adminpassword";
                         $result = $conn->query($sql);
 
                         if ($result->num_rows > 0) {
@@ -39,6 +53,13 @@
                         }  
                     }
  
+                }
+
+                function extraction($data) {
+                    $data = trim($data);
+                    $data = stripslashes($data);
+                    $data = htmlspecialchars($data);
+                    return $data;
                 }
                                 
             
