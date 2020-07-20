@@ -1,38 +1,79 @@
+<?php 
+//require "../func/func.php";
+//require "../config.php";
+require "userRegister.php";
+?>
 <!DOCTYPE html>
 <html>
 <div class="main-container">
     <head>
-        <title>User register</title>
-        <link rel="stylesheet" text = "text/css" href="../stylesheets/pagesheet.css"> 
+        <title>User Details</title>
+        <link rel="stylesheet" text = "text/css" href="../stylesheets/pagesheet.css">  
     </head>
     <H1>
-        social relief program
-        <p>Fill in details</p>
+        social relief program 
     </H1>
         <body>  
                 <form action="userDetails.php" method="POST">
+                <a href="../index.php">home</a>
+                <p>Fill in details to register</p>
+                    <input type="text" name="employerDetails" placeholder="Employer e.g. government ,private, self, unemployed"><br><br>
                     
-                    <div><input type="text" name="cellNumber" placeholder="cell number">
-                    <span class="error">* <?php echo $celNumberEr;?></span><br><br>
+                    <input type="text" name="userlocation" placeholder="where do you stay?"><br><br>
                     
-                    <input type="text" name="userlocation" placeholder="where do you stay?">
-                    <span class="error">* <?php echo $userlocationEr;?></span><br><br>
-                 
-                    <input type="text" name="employerDetails" placeholder="Where do you work?">
-                    <span class="error">* <?php echo $employerDetailsEr;?></span><br><br>
-                    Do you share a toilet?
-                    <input type="radio" name="sharedToilet" id="no" value="no">
-                    <label for="no">no</label>
-                    <input type="radio" name="sharedToilet" id="yes" value="yes">
-                    <label for="yes">yes</label>
-                    <span class="error">* <?php echo $shareToiletEr;?> </span><br><br>
+                    <input type="text" name="cellnumber" placeholder="cell number"><br><br>
 
-                    <label for="salaryRange">salary range:</label>
-                    <input type="number" id="salaryRange" name="salaryRange" min="0" max="100000" step="200" value="0"><br><br>
+                    <input type="text" name="sharedToilet" placeholder="Do you share a toilet? yes/no"><br><br>
+
+                    Number of family members<br>
+                    <input type="number" name="numberOfFamilyMembers" min="0" step="1" value="0"><br><br>
                     
+                    salary<br>
+                    <input type="number" name="salaryRange" min="0" step="200" value="0"><br><br>
+
                     <input type="hidden" name="submit" value="TRUE">
-                    <input type="submit" value="submit"></div>
+                    <input type="submit" value="Register">
                 </form>
+<?php
+/**
+ * 
+ */
+if ($_SERVER["REQUEST_METHOD"]=="POST") {
+    //initialize variables and assign them data recieved from the html form.
+    $cellnumber = intval(extraction($_POST["cellnumber"]));
+    $numberOfFamilyMembers = intval(extraction($_POST["numberOfFamilyMembers"]));
+    $salaryRange = intval(extraction($_POST["salaryRange"]));
+    $employerDetails = extraction($_POST["employerDetails"]);
+    $userlocation = extraction($_POST["userlocation"]);
+    $sharedToilet = extraction($_POST["sharedToilet"]); 
+    //echo $firstname." ".$surname." ".$Idnumber." ".$password;
+    
+    //prepare sql statement and bind.
+    $sqlStatement = $conn->prepare("INSERT INTO UserDetails (employerDetails,userLocation,cellNumber,sharedToilet,salaryRange,numberOfFamilyMembers,userID) VALUES (?,?,?,?,?,?,?)");
+    $sqlStatement->bind_param("ssisiii", $ED, $UL, $CN, $ST, $SR, $NM, $UI);
+
+    $ED = $employerDetails;
+    $UL = $userlocation;
+    $CN = $cellnumber;
+    $ST = $sharedToilet;
+    $SR = $salaryRange;
+    $NM = $numberOfFamilyMembers;
+    $UI = $Idnumber;
+
+
+    if ($sqlStatement->execute()) {
+        echo "1 record added";
+        header("location:userDashboard.php");        
+    } else {
+        die("error".mysqli_error($conn));
+    }
+    $sqlStatement->close();
+    $conn->close();
+
+    
+}
+
+?>
         </body>
         <div>
             <footer id="footer">
@@ -41,69 +82,5 @@
         </div>
     
 </div><!-— /.main-container-->
-<?php 
-
-
-require "../config.php";
-require "../user/signin.php";
-
-$cellNumber = "";
-$userLocation = "";
-$employerDetails = "";
-$shareToilet = "";
-
-//
-$cellNumberEr = "";
-$userLocationEr = "";
-$employerDetailsEr = "";
-$shareToiletER = "";
-
-
-if ($_SERVER["REQUEST_METHOD"]=="POST") {
-    //initialize variables and assign them data recieved from the html form.
-    if (empty($_POST["cellNumber"])) {
-        $cellNumberEr = "cell number is required";
-    } else {
-        $cellNumber = intval(extraction($_POST["cellNumber"]));
-    }
-    if (empty($_POST["userlocation"])) {
-        $userLocationEr = "location is required";
-    } else {
-        $userLocation = extraction($_POST["userlocation"]);
-    }
-    if (empty($_POST["employerDetails"])) {
-        $employerDetailsEr = "employer details is required";
-    } else {
-        $employerDetails = extraction($_POST["employerDetails"]);
-    }
-    if (empty($_POST["sharedToilet"])) {
-        $shareToiletER = "required";
-    } else {
-        $shareToilet = extraction($_POST["sharedToilet"]);
-    }
-    $salaryRange = intval(extraction($_POST["salaryRange"]));
-
-    //prepare sql statement and bind.
-    $sqlStatement = $conn->prepare("INSERT INTO UserDetails (employeeDetails,userlocation,cellNumber,sharedToilet,salaryRange,userID) VALUES (?,?,?,?,?,?)");
-    $sqlStatement->bind_param("ssisii", $UDs, $UL, $CN, $ST, $SR, $UD);
-
-    $UDs = $employerDetails;
-    $UL = $userLocation;
-    $CN = $cellNumber;
-    $ST = $shareToilet;
-    $SR = $salaryRange;
-    $UD = $_SESSION["userID"];
-
-
-    if ($sqlStatement->execute()) {
-                echo "1 record added";
-    } else {
-        die("error".mysqli_error($conn));
-    }
-    $sqlStatement->close();
-    $conn->close();
-
-    //header("refresh:1;url=userDetails.php");
-}
-?>
 </html>
+

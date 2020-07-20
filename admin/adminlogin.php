@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <head>
     <title>Admin login</title>
-    <link rel="stylesheet" href="../stylesheets/stylesheet.css">
+    <link rel="stylesheet" href="../stylesheets/pagesheet.css">
 </head>
 <body>
-        <h1>Dumela Mmaboi</h1>
-        <h2>
-              
-        </h2>
-        <p>Fill in adminName & adminPassword to login</p>
-        <form action="adminlogin.php" method="post">
-                <label>admin username</label>
-                <input type="text" name="adminUsername"><br>
+        <h1>social relief program</h1>
+        
+        <form action="adminlogin.php" method="POST">
+            <h2>Mmaboi</h2>
+        <p>Fill in admin username and password to login</p>
+                <input type="text" name="adminUsername" placeholder="Mmaboi's username"><br><br>
             
-                <label>adminPassword</label>
-                <input type="text" name="adminPassword"><br>
+                <input type="text" name="adminPassword" placeholder="Mmaboi's password"><br><br>
 
                 <input type="hidden" name="submit" value="TRUE">
                 <input type="submit" value="Login">
            
         </form>   
         <?php 
-            //require_once "config.php";
-            //require_once "func/func.php";
+            require "../config.php";
+            require "../func/func.php";
             $adminname = "";
             $adminpassword = "";
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -31,38 +28,26 @@
                     if (empty($adminname) || empty($adminpassword)) {
                         echo "empty username, password\n";
                     } else {
-                        //echo "username : ".$_POST["adminUsername"];
-                        //echo "password : ".$_POST["adminPassword"];
-                        $dbhost = 'localhost';
-                        $dbuser = 'phpmyadmin';
-                        $dbpass = 'KillSwitch[103]';
-                        $dbname = 'SocialReliefProgram';
-                        $conn = mysqli_connect($dbhost, $dbuser, $dbpass) 
-                        or die('Error connecting to mysql');
-                        mysqli_select_db($conn, $dbname) or die("Could not open database");
 
-                        $sql = "SELECT * FROM Admin WHERE adminName = $adminname AND adminPassword = $adminpassword";
-                        $result = $conn->query($sql);
+                        $sqlStatement = $conn->prepare("SELECT * FROM adminstrators WHERE adminID = ? AND adminPassword = ?");
+                        $sqlStatement->bind_param("ss", $AN, $AP);
+                        $AN = $adminname;
+                        $AP = $adminpassword;
 
-                        if ($result->num_rows > 0) {
-                            session_start();
+                        if ($sqlStatement->execute()) {
                             echo "username : ".$_POST["adminUsername"];
                             echo "password : ".$_POST["adminPassword"];
-                            //$_SESSION["adminName"] = $adminName;
-                            //header("Location: adminDashboard.php"); // redirects
+                            header("location:adminDashboard.php");
                         }  
                     }
  
-                }
-
-                function extraction($data) {
-                    $data = trim($data);
-                    $data = stripslashes($data);
-                    $data = htmlspecialchars($data);
-                    return $data;
-                }
-                                
+                }         
             
-        ?> 
+        ?>
+         <div>
+            <footer id="footer">
+            <a href="../index.php">home</a>
+            </footer>
+        </div>
 </body>
 </html>
