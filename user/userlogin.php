@@ -2,6 +2,7 @@
 /**
  * 
  */
+session_start();
 require "func/func.php";
 require "config.php";
 
@@ -15,10 +16,11 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
     $I = $Idnumber;
     $P = $password;
+    $result = $conn->query($sqlStatement);
 
-
-    if ($sqlStatement->execute()&& $sqlStatement->num_rows()>0) {
+    if ($result->num_rows>0) {
                 echo "login successful";
+                $_SESSION["userID"] = $I;
     } else {
         die("error".mysqli_error($conn));
     }

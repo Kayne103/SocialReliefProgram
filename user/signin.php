@@ -2,8 +2,9 @@
 /**
  * 
  */
-require "func/func.php";
-require "config.php";
+session_start();
+require "../func/func.php";
+require "../config.php";
 
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
     //initialize variables and assign them data recieved from the html form.
@@ -25,13 +26,14 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
     if ($sqlStatement->execute()) {
                 echo "1 record added";
+                $_SESSION["userID"] = $Idnumber;
     } else {
         die("error".mysqli_error($conn));
     }
     $sqlStatement->close();
     $conn->close();
 
-    header("refresh:1;url=userDashboard.html");
+    header("refresh:1;url=userDetails.php");
 }
 
 ?>

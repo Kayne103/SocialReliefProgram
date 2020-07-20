@@ -2,7 +2,7 @@ body{
     background-color: rgb(10, 143, 177);
     font-family: sans-serif;
     text-align: center;
-    font-size: large;
+    font-size: larger;
 }
 h1{
     color: whitesmoke;
@@ -40,7 +40,7 @@ form{
     padding: 126px;
 }
 input[type=text]{
-    width: 61%;
+    width: 41%;
     background-color: wheat;
     box-sizing: content-box;
     margin: 2px 0;

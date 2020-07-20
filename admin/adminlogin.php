@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <title>Admin login</title>
-    <link rel="stylesheet" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" href="../stylesheets/stylesheet.css">
 </head>
 <body>
         <h1>Dumela Mmaboi</h1>
