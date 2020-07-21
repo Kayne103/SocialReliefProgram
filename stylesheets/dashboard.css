@@ -1,3 +1,88 @@
+html, body, .grid-container {
+   height: 100%; margin: 0; 
+}
 .grid-container {
-    display: grid;
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: ". .";
+}
+/* For presentation only, no need to copy the code below */
+.grid-container * { 
+ position: relative;
+}
+.grid-container *:after { 
+ content:attr(class);
+ position: fixed;
+ top: 0;
+ left: 0;
+}
+.footer {
+  grid-area: footer;
+  background-color: #000000;
+  padding: 25px;
+  text-align: center;
+}
+.header {
+  background-color: #000000;
+  padding: 1px;
+  text-align: center;
+  font-size: 35px;
+}
+div[class=left]{
+  background-color: rgb(7, 97, 97);
+  text-align: center;
+}
+div[class=right]{
+  background-color: rgb(5, 59, 59);
+}
+body{
+  font-family: sans-serif;
+  color: antiquewhite;
+}
+form{
+  padding: 50px;
+}
+input[type=text]{
+  width: 41%;
+  background-color: wheat;
+  box-sizing: content-box;
+  margin: 2px 0;
+  padding: 12px 20px;
+  border: 2px solid black;
+  border-radius: 2px;
+}
+textarea{
+  width: 61%;
+  background-color: wheat;
+  box-sizing: content-box;
+  margin: 2px 0;
+  padding: 12px 20px;
+  border: 2px solid black;
+  border-radius: 2px;
+}
+input[type=submit]{
+  width: 26%;
+  background-color: #0a525c;
+  border: none;
+  color: rgb(255, 255, 255);
+  padding: 12px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  text-align: center;
+  font-size: larger;   
+}
+input[type=number]{
+  width: 16%;
+  background-color: #ffffff;
+  border: 2px solid black;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  text-decoration: none;
+  margin: 2px 2px;
+  cursor: pointer;
+  text-align: center;
+  font-size: larger;  
+}
+
