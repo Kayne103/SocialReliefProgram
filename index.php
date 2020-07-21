@@ -2,7 +2,7 @@
 <html>
 <div class=”main-container”>
     <head>
-    <link rel="stylesheet" href="pages/stylesheets/stylesheet.css">
+    <link rel="stylesheet" href="stylesheets/stylesheet.css">
     <title>Home</title>
     </head>
     <body>
@@ -10,9 +10,9 @@
             social relief program
         </H1>
         <h2>
-            <a href="pages/userlogin.html">User</a>
-            <a href="pages/adminlogin.html">Admin</a> 
-            <a href="pages/signin.html">Register</a>  
+            <a href="user/userLogin.php">user login</a>
+            <a href="user/userRegister.php">user register</a>  
+            <a href="admin/adminlogin.php">admin</a> 
         </h2>
     </body>
     <div>
