@@ -9,31 +9,36 @@ require "../config.php";
     <title>Comments</title>
 </head>
 <body>
-    <div class="header">
-    <h1>Header</h1>
-    </div>
+    
+    <h1>
+    <form action="comments.php" method="POST">
+            <input type="text" name="userID" placeholder="Search user by ID">
+            <input type="hidden" name="submit" value="TRUE">
+            <input type="submit" value="Search">
+        </form>   
+    </h1>
+    
 
 <div class="grid-container">
 <div class="left">
     <?php
+    $result = mysqli_query($conn, "SELECT * FROM comments");
     if (mysqli_num_rows($result) > 0) {
     ?>
     <table>
-    <tr>
-        <td>First Name</td>
-        <td>Last Name</td>
-        <td>City</td>
-        <td>Email id</td>
+    <tr> 
+        <td>User ID</td>
+        <td>CommentID</td>
+        <td>Comment</td>
     </tr>
     <?php
         $i=0;
         while ($row = mysqli_fetch_array($result)) {
     ?>
     <tr>
-        <td><?php echo $row["first_name"]; ?></td>
-        <td><?php echo $row["last_name"]; ?></td>
-        <td><?php echo $row["city_name"]; ?></td>
-        <td><?php echo $row["email"]; ?></td>
+        <td><?php echo $row["userID"]; ?></td>
+        <td><?php echo $row["commentID"]; ?></td>
+        <td><?php echo $row["usercomment"]; ?></td>
     </tr>
     <?php
         $i++;
@@ -42,7 +47,7 @@ require "../config.php";
     </table>
     <?php
     } else {
-        echo "No result found";
+        echo "No Comments found";
     }
     ?>
 </div> 
@@ -79,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
     $ID = $commentID;
     
     if ($sqlStatement->execute()) {
-                echo "Replied";
+                //echo "Replied";
                 //header("location:userDetails.php");
     } else {
         die("error".mysqli_error($conn));
@@ -95,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 </body>
 
 <div class="footer">
-  <p>Footer</p>
+<a href="../admin/adminDashboard.php">Back to dashboard</a>
 </div>
 
 </html>
