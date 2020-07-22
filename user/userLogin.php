@@ -21,7 +21,7 @@ session_start();
                     <span class="error">*</span><br><br>
                     <input type="hidden" name="submit" value="TRUE">
                     <input type="submit" value="login">
-                    <p>Don't have an account?<a href="./userRegister.php">user register</a></p>
+                    <p>Don't have an account?<a href="./userRegister.php">register</a></p>
                 </form>
                 
 <?php
@@ -44,14 +44,18 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 
         $I = $Idnumber;
         $P = $password;
-        $result = $conn->query($sqlStatement);
+        $result = mysqli_query($conn, $sqlStatement);
+        $row = mysqli_fetch_array($result);
 
-        if ($sqlStatement->execute()) {
-            echo "login successful";
-            header("location:userDashboard.php");   
-        } else {
-            die("error".mysqli_error($conn));
-        }
+        if (mysqli_stmt_execute($sqlStatement)) {
+            mysqli_stmt_store_result($sqlStatement);
+            if (mysqli_stmt_num_rows($sqlStatement) == 1) {
+                header("location:userDashboard.php");
+            } else {
+                echo "wrong password";
+            } 
+            
+        }  
         $sqlStatement->close();
         $conn->close();
 

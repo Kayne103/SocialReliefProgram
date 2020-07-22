@@ -1,7 +1,7 @@
 <?php 
-//require "../func/func.php";
-//require "../config.php";
-require "userRegister.php";
+require "../func/func.php";
+require "../config.php";
+//require "userRegister.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -15,8 +15,8 @@ require "userRegister.php";
     </H1>
         <body>  
                 <form action="userDetails.php" method="POST">
-                <a href="../index.php">home</a>
                 <p>Fill in details to register</p>
+                    <input type="text" name="userID" placeholder="Omang number"><br><br>
                     <input type="text" name="employerDetails" placeholder="Employer e.g. government ,private, self, unemployed"><br><br>
                     
                     <input type="text" name="userlocation" placeholder="where do you stay?"><br><br>
@@ -40,13 +40,13 @@ require "userRegister.php";
  */
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
     //initialize variables and assign them data recieved from the html form.
+    $Idnumber = intval(extraction($_POST["userID"]));
     $cellnumber = intval(extraction($_POST["cellnumber"]));
     $numberOfFamilyMembers = intval(extraction($_POST["numberOfFamilyMembers"]));
     $salaryRange = intval(extraction($_POST["salaryRange"]));
     $employerDetails = extraction($_POST["employerDetails"]);
     $userlocation = extraction($_POST["userlocation"]);
     $sharedToilet = extraction($_POST["sharedToilet"]); 
-    //echo $firstname." ".$surname." ".$Idnumber." ".$password;
     
     //prepare sql statement and bind.
     $sqlStatement = $conn->prepare("INSERT INTO UserDetails (employerDetails,userLocation,cellNumber,sharedToilet,salaryRange,numberOfFamilyMembers,userID) VALUES (?,?,?,?,?,?,?)");
@@ -60,8 +60,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
     $NM = $numberOfFamilyMembers;
     $UI = $Idnumber;
 
-
-    if ($sqlStatement->execute()) {
+    if ($sqlStatement->execute()) {//returns true if the statement was executed.
         echo "1 record added";
         header("location:userDashboard.php");        
     } else {
@@ -77,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
         </body>
         <div>
             <footer id="footer">
-            <a href="https://github.com/kayne103">Kayne103</a>
+            <a href="../index.php">home</a>
             </footer>
         </div>
     

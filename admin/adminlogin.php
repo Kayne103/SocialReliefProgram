@@ -33,14 +33,20 @@
                         $sqlStatement->bind_param("ss", $AN, $AP);
                         $AN = $adminname;
                         $AP = $adminpassword;
+                        $result = mysqli_query($conn, $sqlStatement);
+                        $row = mysqli_fetch_array($result);
 
-                        if ($sqlStatement->execute()) {
-                            echo "username : ".$_POST["adminUsername"];
-                            echo "password : ".$_POST["adminPassword"];
-                            header("location:adminDashboard.php");
+                        if (mysqli_stmt_execute($sqlStatement)) {
+                            mysqli_stmt_store_result($sqlStatement);
+                            if (mysqli_stmt_num_rows($sqlStatement) == 1) {
+                                header("location:adminDashboard.php");
+                            } else {
+                                echo "wrong password";
+                            } 
+                            
                         }  
                     }
- 
+                    
                 }         
             
         ?>
