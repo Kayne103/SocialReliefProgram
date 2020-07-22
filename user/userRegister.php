@@ -15,17 +15,18 @@ require "../config.php";
         <body>  
                 <form action="userRegister.php" method="POST">
                 <p>Fill in details to register</p>
-                    <input type="text" name="IdNumber" placeholder="Omang number"><br><br>
+                <p>* required</p>
+                    <input type="text" name="IdNumber" placeholder="Omang number"><span class="error">*</span><br><br>
                     
-                    <input type="text" name="fname" placeholder="first name"><br><br>
+                    <input type="text" name="fname" placeholder="first name"><span class="error">*</span><br><br>
                     
-                    <input type="text" name="Sname" placeholder="surname"><br><br>
+                    <input type="text" name="Sname" placeholder="surname"><span class="error">*</span><br><br>
                     
-                    <input type="text" name="password" placeholder="password"><br><br>
+                    <input type="text" name="password" placeholder="password"><span class="error">*</span><br><br>
         
                     <input type="hidden" name="submit" value="TRUE">
                     <input type="submit" value="Register">
-                    <p>Already have an account?<a href="./userLogin.php">user register</a></p>
+                    <p>Already have an account?<a href="./userLogin.php">login</a></p>
                 </form>
 <?php
 /**
@@ -37,26 +38,28 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
     $firstname = extraction($_POST["fname"]);
     $surname = extraction($_POST["Sname"]);
     $password = extraction($_POST["password"]);
-    //echo $firstname." ".$surname." ".$Idnumber." ".$password;
     
-    //prepare sql statement and bind.
-    $sqlStatement = $conn->prepare("INSERT INTO Users (username,usersurname,userID,userPassword) VALUES (?,?,?,?)");
-    $sqlStatement->bind_param("ssis", $F, $S, $I, $P);
-
-    $F = $firstname;
-    $S = $surname;
-    $I = $Idnumber;
-    $P = $password;
-
-
-    if ($sqlStatement->execute()) {
-                echo "1 record added";
-                header("location:userDetails.php");
+    if (empty($Idnumber) || empty($password)) {
+        echo "fill in all spaces";
     } else {
-        die("error".mysqli_error($conn));
+        //prepare sql statement and bind.
+        $sqlStatement = $conn->prepare("INSERT INTO Users (username,usersurname,userID,userPassword) VALUES (?,?,?,?)");
+        $sqlStatement->bind_param("ssis", $F, $S, $I, $P);
+
+        $F = $firstname;
+        $S = $surname;
+        $I = $Idnumber;
+        $P = $password;
+
+        if ($sqlStatement->execute()) {
+            echo "1 record added";
+            header("location:userDetails.php");
+        } else {
+            die("error".mysqli_error($conn));
+        }
+        $sqlStatement->close();
+        $conn->close();
     }
-    $sqlStatement->close();
-    $conn->close();
 
     
 }

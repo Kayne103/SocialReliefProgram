@@ -6,19 +6,24 @@ require "../config.php";
 <html>
 <head>
     <link rel="stylesheet" href="../stylesheets/dashboard.css">
-    <title>Comments</title>
+    <title>User</title>
 </head>
 <body>
     
     <h1>
     
+    <form action="viewUsers.php" method="POST">
+            <input type="text" name="userID" placeholder="Search user by ID">
+            <input type="hidden" name="submit" value="TRUE">
+            <input type="submit" value="Search">
+        </form>   
     </h1>
     
 
 <div class="grid-container">
 <div class="left">
     <?php
-    $result = mysqli_query($conn, "SELECT * FROM comments");
+    $result = mysqli_query($conn, "SELECT * FROM Users");
     if (mysqli_num_rows($result) > 0) {
     ?>
     <table>
@@ -27,9 +32,9 @@ require "../config.php";
         while ($row = mysqli_fetch_array($result)) {
     ?>
     <tr>
-        <td><?php echo $row["usercomment"];
+        <td><?php echo $row["username"];
         echo "<br>";
-        echo "By:". $row["userID"]." comment ID:".$row["commentID"]; ?></td>
+        echo "By:". $row["userID"]." comment ID:".$row["usersurname"]; ?></td>
     </tr>
     <?php
         $i++;
@@ -44,12 +49,10 @@ require "../config.php";
 </div> 
 
     <div class="right">
-    <form action="comments.php" method="POST">
+    <form action="viewUsers.php" method="POST">
             <h2>Give users feedback</h2>
-            <textarea name="reply" rows="8" cols="44" placeholder="reply here"></textarea><br>
-            
-            Comment ID<br>
-            <input type="number" name="commentID" min="0" step="1" value="0"><br><br>
+            <textarea name="status" rows="5" cols="30" placeholder="reply here"></textarea><br><br>
+            <input type="text" name="userID" placeholder="user ID"><br><br>
 
             <input type="hidden" name="submit" value="TRUE">
             <input type="submit" value="reply">
@@ -60,18 +63,18 @@ require "../config.php";
          */
         if ($_SERVER["REQUEST_METHOD"]=="POST") {
             //initialize variables and assign them data recieved from the html form.
-            $commentID = intval(extraction($_POST["commentID"]));
-            $reply = extraction($_POST["reply"]);
+            $userID = intval(extraction($_POST["userID"]));
+            $status = extraction($_POST["status"]);
             
-            if (empty($commentID)|| empty($reply)) {
+            if (empty($userID)|| empty($status)) {
                 echo "Can't submit empty form.";
             } else {
                 //prepare sql statement and bind.
-                $sqlStatement = $conn->prepare("UPDATE comments SET adminReply = ? WHERE commentID = ?");
-                $sqlStatement->bind_param("si", $AR, $ID);
+                $sqlStatement = $conn->prepare("INSERT INTO feedback (userID,feedback) VALUES (?,?)");
+                $sqlStatement->bind_param("is", $ID, $F);
 
-                $AR = $reply;
-                $ID = $commentID;
+                $F = $status;
+                $ID = $userID;
                 
                 if ($sqlStatement->execute()) {
                     echo "Reply sent.";
@@ -93,7 +96,7 @@ require "../config.php";
 
 <div class="footer">
 <a href="../admin/adminDashboard.php">Back to dashboard</a>
-<a href="../admin/viewUsers.php">View users</a>
+<a href="../admin/comments.php">View user comments</a>
 </div>
 
 </html>
