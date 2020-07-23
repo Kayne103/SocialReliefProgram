@@ -8,7 +8,7 @@ html, body, .grid-container {
   grid-template-rows: 1fr;
   grid-template-areas: ". .";
 }
-/* For presentation only, no need to copy the code below */
+
 .grid-container * { 
  position: relative;
 }
@@ -33,7 +33,8 @@ h1 {
 }
 div[class=left]{
   background-color: rgb(7, 97, 97);
-  text-align: center;
+  text-align: left;
+  color: #000000;
 }
 div[class=right]{
   background-color: rgb(5, 59, 59);
@@ -91,13 +92,13 @@ table {
   font-family:sans-serif;
   border-collapse: collapse;
   width: 100%;
-  text-align: center;
+  text-align: left;
 }
 td, th {
   border: 2px solid #000000;
-  text-align: center;
+  text-align: left;
   padding: 20px;
-
+  
 }
 a {
   color: whitesmoke;
