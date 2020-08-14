@@ -7,16 +7,16 @@ require "../config.php";
 
 <head>
     <link rel="stylesheet" href="../stylesheets/dashboard.css">
-    <title>Admin</title>
+    <title>User</title>
 </head>
 
 <body>
 
     <h1> </h1>
     <div class="grid-container">
-        <div class="left">
+    <div class="left">
             <?php
-            $result = mysqli_query($conn, "SELECT UD.*,U.username,U.usersurname,FB.feedback FROM UserDetails AS UD RIGHT JOIN Users AS U ON U.userID=UD.userID LEFT JOIN feedback AS FB ON U.userID=FB.userID");
+            $result = mysqli_query($conn, "SELECT U.username,U.userID,C.usercomment,C.commentID,C.adminReply,UD.userlocation,F.feedback FROM Users AS U RIGHT JOIN comments AS C ON U.userID=C.userID LEFT JOIN UserDetails AS UD ON U.userID=UD.userID LEFT JOIN feedback AS F ON U.userID=F.userID");
             if (mysqli_num_rows($result) > 0) {
             ?>
                 <table>
@@ -25,21 +25,11 @@ require "../config.php";
                     while ($row = mysqli_fetch_array($result)) {
                     ?>
                         <tr>
-                            <td><?php echo $row["username"] . "\n" . $row["usersurname"] . "\n" . $row["userID"];
-                                echo "<br>";
-                                echo "Cell number:\n" . $row["cellNumber"];
-                                echo "<br>";
-                                echo "Location:\n" . $row["userlocation"];
-                                echo "<br>";
-                                echo "Employer:\n" . $row["employerDetails"];
-                                echo "<br>";
-                                echo "Salary:\n" . $row["salaryRange"];
-                                echo "<br>";
-                                echo "Number of family members:\n" . $row["numberOfFamilyMembers"];
-                                echo "<br>";
-                                echo "Shared Toilet:\n" . $row["sharedToilet"];
-                                echo "<br>";
-                                echo "Admin feedback:\n" . $row["feedback"];
+                            <td><?php echo $row["usercomment"];
+                                echo "<br><br>";
+                                echo "By:" . $row["username"] . "\nComment ID:" . $row["commentID"]. "\nLocation:" . $row["userlocation"];
+                                echo "<br><br>";
+                                echo "Reply:\n" . $row["adminReply"]."\nStatus:\n" . $row["feedback"];
                                 ?>
                             </td>
                         </tr>
@@ -50,19 +40,19 @@ require "../config.php";
                 </table>
             <?php
             } else {
-                echo "No Users found";
+                echo "No Comments found";
             }
             ?>
         </div>
 
         <div class="right">
-            <form action="viewUsers.php" method="POST">
-                <h2>Give users feedback</h2>
+            <form action="userComment.php" method="POST">
+                <h2>Comment here</h2>
                 <textarea name="status" rows="5" cols="30" placeholder="reply here"></textarea><br><br>
                 <input type="text" name="userID" placeholder="user ID"><br><br>
 
                 <input type="hidden" name="submit" value="TRUE">
-                <input type="submit" value="reply">
+                <input type="submit" value="Comment">
             </form>
             <?php
             /**
@@ -77,7 +67,7 @@ require "../config.php";
                     echo "Can't submit empty form.";
                 } else {
                     //prepare sql statement and bind.
-                    $sqlStatement = $conn->prepare("INSERT INTO feedback (userID,feedback) VALUES (?,?)");
+                    $sqlStatement = $conn->prepare("INSERT INTO comments (userID,userComment) VALUES (?,?)");
                     $sqlStatement->bind_param("is", $ID, $F);
 
                     $F = $status;
@@ -85,12 +75,13 @@ require "../config.php";
 
                     if ($sqlStatement->execute()) {
                         echo "Reply sent.";
+                        $sqlStatement->close();
+                        $conn->close();
                     } else {
                         die("error" . mysqli_error($conn));
                     }
                 }
-                $sqlStatement->close();
-                $conn->close();
+
             }
 
             ?>
@@ -100,8 +91,8 @@ require "../config.php";
 </body>
 
 <div class="footer">
-    <a href="../admin/adminDashboard.php">Back to dashboard</a>
-    <a href="../admin/comments.php">View user comments</a>
+<a href="../user/userLogin.php">logout</a>
+    
 </div>
 
 </html>

@@ -15,7 +15,8 @@ require "../config.php";
     <div class="grid-container">
         <div class="left">
             <?php
-            $result = mysqli_query($conn, "SELECT U.username,U.userID,C.usercomment,C.commentID,C.adminReply FROM Users AS U RIGHT JOIN comments AS C ON U.userID=C.userID");
+                $result = mysqli_query($conn, "SELECT U.username,U.userID,C.usercomment,C.commentID,C.adminReply,UD.userlocation,F.feedback FROM Users AS U RIGHT JOIN comments AS C ON U.userID=C.userID LEFT JOIN UserDetails AS UD ON U.userID=UD.userID LEFT JOIN feedback AS F ON U.userID=F.userID");
+            
             if (mysqli_num_rows($result) > 0) {
             ?>
                 <table>
@@ -26,9 +27,9 @@ require "../config.php";
                         <tr>
                             <td><?php echo $row["usercomment"];
                                 echo "<br><br>";
-                                echo "By:" . $row["username"] . "\nID:" . $row["userID"] . "\nComment ID:" . $row["commentID"];
+                                echo "By:" . $row["username"] . "\nID:" . $row["userID"] . "\nComment ID:" . $row["commentID"]. "\nLocation:" . $row["userlocation"];
                                 echo "<br><br>";
-                                echo "Reply:\n" . $row["adminReply"];
+                                echo "Reply:\n" . $row["adminReply"]."\nStatus:\n" . $row["feedback"];
                                 ?>
                             </td>
                         </tr>
